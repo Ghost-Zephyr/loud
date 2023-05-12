@@ -1,0 +1,52 @@
+cabal-version:      3.4
+name:               loud
+version:            0.1.0
+-- synopsis:
+-- description:
+license:            MIT
+license-file:       LICENSE
+author:             Sivert V. Sæther
+maintainer:         gmail@sivert.pw
+category:           Prank
+build-type:         Simple
+extra-source-files: cbits
+
+common warnings
+    ghc-options: -Wall
+
+foreign-library loud
+    type:               native-shared
+    other-extensions:   CApiFFI
+    other-modules:      Loud
+    build-depends:
+        bytestring ^>= 0.11.4.0,
+        vector ^>= 0.13.0.0,
+        base ^>= 4.18.0.0
+    hs-source-dirs:     src
+--    asm-sources:        pre.s
+    c-sources:          csrc/pre.c
+    default-language:   GHC2021
+
+library
+    import:             warnings
+    exposed-modules:    Loud
+    other-extensions:   CApiFFI
+    build-depends:
+        bytestring ^>= 0.11.4.0,
+        vector ^>= 0.13.0.0,
+        base ^>= 4.18.0.0,
+        mmap ^>= 0.5.9
+    hs-source-dirs:     src
+    asm-sources:        pre.s
+--    c-sources:          csrc/pre.c
+    default-language:   GHC2021
+
+test-suite loud-test
+    import:           warnings
+    default-language: GHC2021
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Main.hs
+    build-depends:
+        base ^>=4.18.0.0,
+        loud
